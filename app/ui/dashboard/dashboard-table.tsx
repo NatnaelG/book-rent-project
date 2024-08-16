@@ -138,11 +138,13 @@ export default function DashboardTable() {
             <GridActionsCellItem
               icon={<EditIcon sx={{ color: "#000" }} />}
               label="Edit"
+              key={params.id}
               onClick={handleEditClick}
               // showInMenu
             />,
             <GridActionsCellItem
               icon={<DeleteIcon color={"error"} />}
+              key={params.id}
               label="Delete"
               // onClick={deleteUser(params.id)}
             />,
