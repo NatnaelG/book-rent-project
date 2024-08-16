@@ -1,0 +1,147 @@
+"use client";
+
+import {
+  Box,
+  Button,
+  Checkbox,
+  Divider,
+  FormControlLabel,
+  FormGroup,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
+import Link from "next/link";
+
+// import React, { useActionState } from "react";
+import { authenticate } from "@/app/lib/actions";
+
+import { useFormStatus, useFormState } from "react-dom";
+
+// const initialState = {
+//   email: '',
+//   password: ''
+// }
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  children: React.ReactNode;
+}
+
+export default function AuthForm(prop: { type: "Login" | "Sign Up" }) {
+  // const [errorMessage, formAction, isPending] = useActionState(
+  //     authenticate,
+  //     undefined
+  // );
+
+  const [errorMessage, formAction, isPending] = useFormState(
+    authenticate,
+    undefined
+  );
+  return (
+    <Box component="form" action={formAction}>
+      <Stack spacing={1} pt={2} pb={5}>
+        <Typography variant="h4">{prop.type}</Typography>
+        <Divider />
+      </Stack>
+
+      <Stack spacing={2}>
+        {prop.type !== "Login" && (
+          <TextField
+            id="name"
+            label="Name"
+            name="name"
+            // type="email"
+            variant="outlined"
+          />
+        )}
+        <TextField
+          id="email"
+          label="Email address"
+          name="email"
+          type="email"
+          variant="outlined"
+        />
+        <TextField
+          id="password"
+          label="Password"
+          name="password"
+          type="password"
+          autoComplete="current-password"
+          variant="outlined"
+        />
+
+        <TextField
+          id="type"
+          name="type"
+          type="hidden"
+          value={prop.type}
+          sx={{ display: "none" }}
+        />
+
+        {prop.type !== "Login" && (
+          <>
+            <TextField
+              id="confirmPassword"
+              label="Confirm Password"
+              name="confirmPassword"
+              type="password"
+              autoComplete="current-password"
+              variant="outlined"
+            />
+            <TextField
+              id="location"
+              label="Location"
+              name="location"
+              variant="outlined"
+            />
+            <TextField
+              id="phoneNumber"
+              label="Phone Number"
+              name="phoneNumber"
+              variant="outlined"
+            />
+          </>
+        )}
+
+        <FormGroup>
+          <FormControlLabel
+            control={<Checkbox />}
+            label={
+              prop.type === "Login"
+                ? "Remeber me"
+                : "I accept the Terms and Conditions"
+            }
+          />
+        </FormGroup>
+
+        <Button variant="contained" disabled={isPending} type="submit">
+          {prop.type}
+        </Button>
+        {prop.type === "Login" ? (
+          <>
+            <Typography
+              textAlign={"center"}
+              sx={{ ">a": { textDecoration: "none" } }}
+            >
+              Have no account? <Link href={"register"}>Sign up</Link>
+            </Typography>
+          </>
+        ) : (
+          <>
+            <Typography
+              textAlign={"center"}
+              sx={{ ">a": { textDecoration: "none" } }}
+            >
+              Already have an account <Link href={"login"}>Login</Link>
+            </Typography>
+          </>
+        )}
+      </Stack>
+      {errorMessage && (
+        <>
+          {/* <ExclamationCircleIcon className="h-5 w-5 text-red-500" /> */}
+          <p className="text-sm text-red-500">{errorMessage}</p>
+        </>
+      )}
+    </Box>
+  );
+}
