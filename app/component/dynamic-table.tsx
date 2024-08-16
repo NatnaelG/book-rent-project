@@ -16,6 +16,7 @@ type Person = {
   status: string;
 };
 
+
 //nested data is ok, see accessorKeys in ColumnDef below
 const data: Person[] = [
   {
