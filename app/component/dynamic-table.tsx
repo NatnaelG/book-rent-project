@@ -14,6 +14,9 @@ import {
 
 import CheckIcon from "@mui/icons-material/Check";
 
+import Image from "next/image";
+import DefaultAvatar from "../../public/default-avatar.jpeg";
+
 //example data type
 type Person = {
   number: number;
@@ -150,6 +153,28 @@ const DynamicTable = () => {
         accessorKey: "name",
         header: "Owner",
         size: 150,
+        Cell: ({ renderedCellValue, row }) => (
+          <Stack
+            key={row.original.number}
+            direction={"row"}
+            spacing={1}
+            sx={{
+              ">img": {
+                borderRadius: "50%",
+              },
+            }}
+          >
+            <Image
+              src={DefaultAvatar}
+              alt="Default Avatar"
+              // className={styles.vercelLogo}
+              width={24}
+              height={24}
+              priority
+            />
+            <Typography>{renderedCellValue}</Typography>
+          </Stack>
+        ),
       },
       {
         accessorKey: "category", //normal accessorKey
