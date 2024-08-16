@@ -165,10 +165,23 @@ const DynamicTable = () => {
         accessorKey: "status",
         header: "Status",
         size: 150,
+        muiTableHeadCellProps: {
+          sx: {
+            "& .Mui-TableHeadCell-Content": {
+              justifyContent: "center",
+            },
+          },
+        },
         Cell: ({ renderedCellValue, row }) => (
           <FormControlLabel
             value="start"
-            sx={{ background: renderedCellValue === "ACTIVE" ? "#0080001A" : "#8000001A", borderRadius: "15px", p: 1 }}
+            sx={{
+              background:
+                renderedCellValue === "ACTIVE" ? "#0080001A" : "#8000001A",
+              borderRadius: "15px",
+              p: 1,
+              mx: 0,
+            }}
             control={
               <Switch
                 color={renderedCellValue === "ACTIVE" ? "success" : "error"}
@@ -181,7 +194,7 @@ const DynamicTable = () => {
                     "& .MuiSwitch-thumb": {
                       ml: renderedCellValue === "ACTIVE" ? "35px" : 0,
                     },
-                  }
+                  },
                 }}
               />
             }
