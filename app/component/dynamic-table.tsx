@@ -142,17 +142,38 @@ const DynamicTable = () => {
       {
         accessorKey: "number", //access nested data with dot notation
         header: "No.",
-        size: 50,
+        size: 70,
+        muiTableHeadCellProps: {
+          sx: {
+            "& .Mui-TableHeadCell-Content": {
+              color: "#656575",
+            },
+          },
+        },
       },
       {
         accessorKey: "author", //access nested data with dot notation
         header: "Author",
-        size: 150,
+        size: 100,
+        muiTableHeadCellProps: {
+          sx: {
+            "& .Mui-TableHeadCell-Content": {
+              color: "#656575",
+            },
+          },
+        },
       },
       {
         accessorKey: "name",
         header: "Owner",
-        size: 150,
+        size: 200,
+        muiTableHeadCellProps: {
+          sx: {
+            "& .Mui-TableHeadCell-Content": {
+              color: "#656575",
+            },
+          },
+        },
         Cell: ({ renderedCellValue, row }) => (
           <Stack
             key={row.original.number}
@@ -180,11 +201,35 @@ const DynamicTable = () => {
         accessorKey: "category", //normal accessorKey
         header: "Category",
         size: 200,
+        muiTableHeadCellProps: {
+          sx: {
+            "& .Mui-TableHeadCell-Content": {
+              color: "#656575",
+            },
+          },
+        },
+        Cell: ({ renderedCellValue, row }) => (
+          <Typography key={row.original.number} color={"#656575"}>
+            {renderedCellValue}
+          </Typography>
+        ),
       },
       {
         accessorKey: "bookName",
         header: "Book Name",
         size: 150,
+        muiTableHeadCellProps: {
+          sx: {
+            "& .Mui-TableHeadCell-Content": {
+              color: "#656575",
+            },
+          },
+        },
+        Cell: ({ renderedCellValue, row }) => (
+          <Typography key={row.original.number} color={"#656575"}>
+            {renderedCellValue}
+          </Typography>
+        ),
       },
       {
         accessorKey: "status",
@@ -194,6 +239,7 @@ const DynamicTable = () => {
           sx: {
             "& .Mui-TableHeadCell-Content": {
               justifyContent: "center",
+              color: "#656575",
             },
           },
         },
