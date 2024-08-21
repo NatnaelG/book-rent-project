@@ -1,9 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest } from "next/server";
 
-export function GET(req: NextApiRequest, res: NextApiResponse) {
-    return Response.json({ message: 'Hello from Next.js!' })
+export function GET(req: NextRequest, res: NextApiResponse) {
+    return res.json({ message: 'Hello from Next.js!' })
 }
 
-export function POST(req: NextApiRequest, res: NextApiResponse) {
-    return Response.json({ message: 'Hello from Next.js!' })
+export function POST(req: NextRequest, res: NextApiResponse) {
+    return res.json({ message: 'Hello from Next.js!' })
 }
