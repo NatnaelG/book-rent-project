@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { inter } from '@/app/ui/fonts';
 import "./globals.css";
 
+import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 
 // import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -33,6 +34,7 @@ export default function RootLayout({
                 {/* <ReactQueryProvider> */}
                     {children}
                     <SpeedInsights />
+                    <Analytics />
                 {/* </ReactQueryProvider> */}
             </body>
         </html>
