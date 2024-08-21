@@ -139,7 +139,7 @@ export default function AuthForm(prop: { type: "Login" | "Sign Up" }) {
       {errorMessage && (
         <>
           {/* <ExclamationCircleIcon className="h-5 w-5 text-red-500" /> */}
-          <p className="text-sm text-red-500">{errorMessage}</p>
+          <p className="text-sm text-red-500" style={{color: "#ff0000"}}>{errorMessage}</p>
         </>
       )}
     </Box>

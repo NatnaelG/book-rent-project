@@ -5,6 +5,7 @@ import { z } from "zod";
 import { sql } from "@vercel/postgres";
 // import type { User } from '@/app/lib/definitions';
 import bcrypt from "bcrypt";
+import prisma from "./app/lib/db";
 
 type User = {
   id: string;
@@ -74,11 +75,20 @@ export const { auth, signIn, signOut } = NextAuth({
           if (credentials.type === "Sign Up") {
             console.log("parsedCredentials", parsedCredentials);
             const hashedPassword = await bcrypt.hash(password, 10);
-            const insertedUser = await sql<User>`
-              INSERT INTO users (name, email, password, location, phoneNumber)
-              VALUES (${name}, ${email}, ${hashedPassword}, ${location}, ${phoneNumber})
-              ON CONFLICT (id) DO NOTHING;
-            `;
+            // const insertedUser = await sql<User>`
+            //   INSERT INTO users (name, email, password, location, phoneNumber)
+            //   VALUES (${name}, ${email}, ${hashedPassword}, ${location}, ${phoneNumber})
+            //   ON CONFLICT (id) DO NOTHING;
+            // `;
+            const insertedUser = await prisma.user.create({
+              data: {
+                email: email,
+                location: location,
+                name: name,
+                password: hashedPassword,
+                phoneNumber: phoneNumber
+              }
+            });
             console.log("insertedUser", insertedUser);
           }
           const user = await getUser(email);

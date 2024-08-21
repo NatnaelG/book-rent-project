@@ -18,6 +18,9 @@ import {
 import UpgradeIcon from "@mui/icons-material/Upgrade";
 
 import { styled } from "@mui/material/styles";
+import { Formik, Form } from "formik";
+import { z } from "zod";
+import { uploadBook } from "@/app/lib/actions";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -32,6 +35,23 @@ const VisuallyHiddenInput = styled("input")({
 });
 
 export default function BookUpload() {
+  const formValidation = z.object({
+    // email: z.string().email(),
+    // password: z.string().min(6),
+    // confirmPassword: z.string().min(6).optional(),
+    // location: z.string().optional(),
+    // phoneNumber: z.string().min(9).optional(),
+    book_name: z.string().optional(),
+  });
+  // .required({
+  //   email: true,
+  //   password: true,
+  //   confirmPassword: credentials.type === "Sign up",
+  //   location: z.string().min(6),
+  //   phoneNumber: z.string().min(6),
+  // })
+  // .safeParse(credentials);
+
   const [open, setOpen] = React.useState(true);
   const [openModal, setOpenModal] = React.useState(false);
 
@@ -101,7 +121,11 @@ export default function BookUpload() {
               labelId="demo-simple-select-label-book-qty"
               id="demo-simple-select-book-qty"
               disabled
-            ></Select>
+              value={""}
+            >
+            <MenuItem value={10}>Book 1</MenuItem>
+              
+            </Select>
           </FormControl>
           <TextField
             id="standard-error"
@@ -120,7 +144,11 @@ export default function BookUpload() {
         <Button
           variant="contained"
           disableElevation
-          sx={{ width: "321px", height: "74px", borderRadius: "20px" }}
+          sx={{
+            width: "321px",
+            height: "74px",
+            borderRadius: "20px",
+          }}
         >
           Submit
         </Button>
@@ -147,51 +175,98 @@ export default function BookUpload() {
             height: "457px",
           }}
         >
-          <Box
+          {/* <Box
             component="form"
             //  action={formAction}
+          > */}
+          <Formik
+            initialValues={{
+              book_name: "",
+              author_name: "",
+              category: "",
+            }}
+            // validationSchema={formValidation}
+            onSubmit={(values) => {
+              console.log("submitting", values);
+              // props.onSubmit(values);
+            }}
           >
-            <Stack spacing={1} pt={2} pb={5}>
-              <Typography variant="h4">{"Add Book"}</Typography>
-              <Divider />
-            </Stack>
+            {function (formik) {
+              const { values, errors, touched, handleChange, handleBlur } =
+                formik;
+                console.log("value.cate" , formik.values, formik.values.category)
 
-            <Stack spacing={2}>
-              <TextField
-                id="book_name"
-                label="Book Name"
-                name="book_name"
-                variant="outlined"
-              />
+              return (
+                <>
+                  <Form action={uploadBook} style={{ height: "100%" }}>
+                    <Stack spacing={1} pt={2} pb={5}>
+                      <Typography variant="h4">{"Add Book"}</Typography>
+                      <Divider />
+                    </Stack>
 
-              <TextField
-                id="author_name"
-                label="Author Name"
-                name="author_name"
-                variant="outlined"
-              />
-              <FormControl sx={{ m: 1, minWidth: 320 }}>
-                <InputLabel id="demo-simple-select-label">Category</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label-book-qty"
-                  id="demo-simple-select-book-qty"
-                >
-                  <MenuItem value={"Fiction"}>Fiction</MenuItem>
-                  <MenuItem value={"Fiction"}>Fiction</MenuItem>
-                </Select>
-              </FormControl>
+                    <Stack spacing={2}>
+                      <FormControl sx={{ m: 1, minWidth: 320 }}>
+                        <TextField
+                          id="book_name"
+                          label="Book Name"
+                          name="book_name"
+                          variant="outlined"
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          error={Boolean(errors.book_name && touched.book_name)}
+                          value={values.book_name}
+                        />
+                      </FormControl>
+                      <FormControl sx={{ m: 1, minWidth: 320 }}>
+                        <TextField
+                          id="author_name"
+                          label="Author Name"
+                          name="author_name"
+                          variant="outlined"
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          error={Boolean(
+                            errors.author_name && touched.author_name
+                          )}
+                          value={values.author_name}
+                        />
+                      </FormControl>
+                      <FormControl sx={{ m: 1, minWidth: 320 }}>
+                        <InputLabel id="demo-simple-select-label">
+                          Category
+                        </InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label-book-qty"
+                          id="demo-simple-select-book-qty"
+                          name="category"
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          error={Boolean(errors.category && touched.category)}
+                          value={values.category}
+                        >
+                          <MenuItem value={"Fiction"}>Fiction</MenuItem>
+                          <MenuItem value={"Autobiography"}>
+                            Autobiography
+                          </MenuItem>
+                        </Select>
+                      </FormControl>
 
-              <Button variant="contained" type="submit">
-                {"Add"}
-              </Button>
-            </Stack>
-            {/* {errorMessage && (
+                      <Button variant="contained" type="submit">
+                        {"Add"}
+                      </Button>
+                    </Stack>
+                    {/* {errorMessage && (
             <> */}
-            {/* <ExclamationCircleIcon className="h-5 w-5 text-red-500" /> */}
-            {/* <p className="text-sm text-red-500">{errorMessage}</p>
+                    {/* <ExclamationCircleIcon className="h-5 w-5 text-red-500" /> */}
+                    {/* <p className="text-sm text-red-500">{errorMessage}</p>
             </>
           )} */}
-          </Box>
+                  </Form>
+                </>
+              );
+            }}
+          </Formik>
+          {/* </Box> */}
         </Item>
       </Modal>
     </Item>
