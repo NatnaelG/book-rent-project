@@ -37,6 +37,12 @@ const Links = [
     icon: PersonOutlineOutlinedIcon,
   },
   {
+    name: "Book Upload",
+    path: "/book-upload",
+    location: "upper",
+    icon: CollectionsBookmarkOutlinedIcon,
+  },
+  {
     name: "Other",
     path: "/",
     location: "upper",

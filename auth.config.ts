@@ -12,6 +12,7 @@ export const authConfig = {
       const isOnAllowedPage =
         nextUrl.pathname.startsWith("/dashboard") ||
         nextUrl.pathname.startsWith("/books") ||
+        nextUrl.pathname.startsWith("/book-upload") ||
         nextUrl.pathname.startsWith("/owners");
 
       if (isOnAllowedPage) {
