@@ -71,6 +71,11 @@ export default function BookUpload() {
     setOpenModal(true);
   };
 
+  const [uploadResult, setUploadResult] = React.useState({
+    pending: false,
+    isError: false,
+    message: "",
+  });
   return (
     <Item sx={{ height: "90vh", p: "50px 28px 50px 28px" }}>
       <Stack direction={"column"} alignItems={"center"} spacing={5}>
@@ -123,8 +128,7 @@ export default function BookUpload() {
               disabled
               value={""}
             >
-            <MenuItem value={10}>Book 1</MenuItem>
-              
+              <MenuItem value={10}>Book 1</MenuItem>
             </Select>
           </FormControl>
           <TextField
@@ -187,18 +191,35 @@ export default function BookUpload() {
             }}
             // validationSchema={formValidation}
             onSubmit={(values) => {
+              setUploadResult((prev) => ({ ...prev, pending: true }));
               console.log("submitting", values);
-              // props.onSubmit(values);
+
+              uploadBook(values)
+                .then((res) => {
+                  console.log("res", res);
+                  setUploadResult({
+                    pending: false,
+                    isError: res === "Something went wrong.",
+                    message: res,
+                  });
+                  res !== "Something went wrong." && handleCloseModal();
+                })
+                .catch((err) =>
+                  setUploadResult({
+                    pending: false,
+                    isError: true,
+                    message: "Error occured",
+                  })
+                );
             }}
           >
             {function (formik) {
               const { values, errors, touched, handleChange, handleBlur } =
                 formik;
-                console.log("value.cate" , formik.values, formik.values.category)
 
               return (
                 <>
-                  <Form action={uploadBook} style={{ height: "100%" }}>
+                  <Form style={{ height: "100%" }}>
                     <Stack spacing={1} pt={2} pb={5}>
                       <Typography variant="h4">{"Add Book"}</Typography>
                       <Divider />
@@ -251,16 +272,25 @@ export default function BookUpload() {
                         </Select>
                       </FormControl>
 
-                      <Button variant="contained" type="submit">
+                      <Button
+                        variant="contained"
+                        type="submit"
+                        disabled={uploadResult.pending}
+                      >
                         {"Add"}
                       </Button>
                     </Stack>
-                    {/* {errorMessage && (
-            <> */}
-                    {/* <ExclamationCircleIcon className="h-5 w-5 text-red-500" /> */}
-                    {/* <p className="text-sm text-red-500">{errorMessage}</p>
-            </>
-          )} */}
+                    {uploadResult.isError && (
+                      <>
+                        {/* <ExclamationCircleIcon className="h-5 w-5 text-red-500" /> */}
+                        <p
+                          className="text-sm text-red-500"
+                          style={{ color: "#ff0000" }}
+                        >
+                          {uploadResult.message}
+                        </p>
+                      </>
+                    )}
                   </Form>
                 </>
               );
