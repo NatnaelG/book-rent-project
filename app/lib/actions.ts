@@ -52,10 +52,16 @@ export async function uploadBook(values: {
 
     console.log("insertedBook", insertedBook);
     return "Success";
-
   } catch (error) {
-
     console.log("insertedBookError", error);
     return "Something went wrong.";
   }
+}
+
+export async function getBooks() {
+  return await prisma.book.findMany({
+    include: {
+      owner: true,
+    },
+  });
 }
