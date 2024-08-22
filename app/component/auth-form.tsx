@@ -32,10 +32,7 @@ export default function AuthForm(prop: { type: "Login" | "Sign Up" }) {
   //     undefined
   // );
 
-  const [errorMessage, formAction, isPending] = useFormState(
-    authenticate,
-    undefined
-  );
+  const [state, formAction, isPending] = useFormState(authenticate, undefined);
   return (
     <Box component="form" action={formAction}>
       <Stack spacing={1} pt={2} pb={5}>
@@ -45,13 +42,16 @@ export default function AuthForm(prop: { type: "Login" | "Sign Up" }) {
 
       <Stack spacing={2}>
         {prop.type !== "Login" && (
-          <TextField
-            id="name"
-            label="Name"
-            name="name"
-            // type="email"
-            variant="outlined"
-          />
+          <>
+            <TextField
+              id="name"
+              label="Name"
+              name="name"
+              // type="email"
+              variant="outlined"
+            />
+            {state?.errors?.name && <p>{state.errors.name}</p>}
+          </>
         )}
         <TextField
           id="email"
@@ -60,6 +60,7 @@ export default function AuthForm(prop: { type: "Login" | "Sign Up" }) {
           type="email"
           variant="outlined"
         />
+        {state?.errors?.email && <p>{state.errors.email}</p>}
         <TextField
           id="password"
           label="Password"
@@ -68,6 +69,16 @@ export default function AuthForm(prop: { type: "Login" | "Sign Up" }) {
           autoComplete="current-password"
           variant="outlined"
         />
+        {state?.errors?.password && (
+          <div>
+            <p>Password must:</p>
+            <ul>
+              {state.errors.password.map((error) => (
+                <li key={error}>- {error}</li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         <TextField
           id="type"
@@ -114,7 +125,7 @@ export default function AuthForm(prop: { type: "Login" | "Sign Up" }) {
         </FormGroup>
 
         <Button variant="contained" disabled={isPending} type="submit">
-          {prop.type}
+          {isPending ? "Submitting..." : prop.type}
         </Button>
         {prop.type === "Login" ? (
           <>
@@ -136,12 +147,12 @@ export default function AuthForm(prop: { type: "Login" | "Sign Up" }) {
           </>
         )}
       </Stack>
-      {errorMessage && (
-        <>
-          {/* <ExclamationCircleIcon className="h-5 w-5 text-red-500" /> */}
-          <p className="text-sm text-red-500" style={{color: "#ff0000"}}>{errorMessage}</p>
+      {/* {errorMessage && (
+        <> */}
+      {/* <ExclamationCircleIcon className="h-5 w-5 text-red-500" /> */}
+      {/* <p className="text-sm text-red-500" style={{color: "#ff0000"}}>{errorMessage}</p>
         </>
-      )}
+      )} */}
     </Box>
   );
 }
