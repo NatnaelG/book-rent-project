@@ -1,5 +1,6 @@
 import * as React from "react";
 import {
+  MRT_ColumnFiltersState,
   MaterialReactTable,
   useMaterialReactTable,
   type MRT_ColumnDef,
@@ -311,7 +312,7 @@ const DynamicTable = ({
     []
   );
 
-  const [columnFilters, setColumnFilters] = React.useState([]);
+  const [columnFilters, setColumnFilters] = React.useState<MRT_ColumnFiltersState>([]);
   const [data, setData] = React.useState(books);
 
   console.log("columnFilter", columnFilters);

@@ -72,7 +72,11 @@ export async function getBooks(params: { id: string; value: string }[] | null) {
         };
         // query.where["owner"][param.id] = { contains: param.value };
       } else {
-        query.where[param.id] = { contains: param.value };
+        query.where = {
+          ...query.where,
+          [param.id]: { contains: param.value }
+        };
+        // query.where[param.id] = { contains: param.value };
       }
     }
     console.log("query0", query);
