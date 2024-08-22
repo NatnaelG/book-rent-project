@@ -41,8 +41,11 @@ export default function Books() {
     }[]
   >([]);
 
+  const fetchBooks = (params: { id: string; value: string }[] | null = null) =>
+    getBooks(params).then((res) => setBooks(res));
+
   useEffect(() => {
-    getBooks().then((res) => setBooks(res));
+    fetchBooks();
   }, []);
 
   console.log("Books", books);
@@ -59,7 +62,7 @@ export default function Books() {
     >
       {/* <DashboardTable /> */}
       <DynamicTable
-        data={books.map((book, index) => ({
+        books={books.map((book, index) => ({
           //   ...book,
           //   number: number,
           author: book.author,
@@ -70,6 +73,7 @@ export default function Books() {
           name: book.owner.name,
           number: ++index,
         }))}
+        fetchBooks={fetchBooks}
       />
     </Item>
   );

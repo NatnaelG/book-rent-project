@@ -46,7 +46,7 @@ export async function uploadBook(values: {
         author: values.author_name,
         bookName: values.book_name,
         category: values.category,
-        owner: { connect: { id: "d72338d3-8742-47a4-a6ec-37cf6e6ada3e" } },
+        owner: { connect: { id: "2a2d6737-cf10-430a-9791-44ac7cc1309c" } },
       },
     });
 
@@ -58,8 +58,29 @@ export async function uploadBook(values: {
   }
 }
 
-export async function getBooks() {
+export async function getBooks(params: { id: string; value: string }[] | null) {
+  console.log("Params", params);
+  // let query = params !== null && params?.length > 0 ? { ["where"]: {} } : {};
+  let query = { where: {} };
+
+  params?.map((param) => {
+    if (query.where !== undefined) {
+      if (param.id === "name") {
+        query.where = {
+          ...query.where,
+          owner: { [param.id]: { contains: param.value } },
+        };
+        // query.where["owner"][param.id] = { contains: param.value };
+      } else {
+        query.where[param.id] = { contains: param.value };
+      }
+    }
+    console.log("query0", query);
+    return param;
+  });
+
   return await prisma.book.findMany({
+    ...query,
     include: {
       owner: true,
     },

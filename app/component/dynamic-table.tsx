@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import * as React from "react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -18,7 +18,7 @@ import Image from "next/image";
 import DefaultAvatar from "../../public/default-avatar.jpeg";
 
 //example data type
-type Person = {
+type Book = {
   number: number;
   author: string;
   name: string;
@@ -135,9 +135,15 @@ type Person = {
 //   },
 // ];
 
-const DynamicTable = ({ data }: { data: Person[] }) => {
+const DynamicTable = ({
+  books,
+  fetchBooks,
+}: {
+  books: Book[];
+  fetchBooks: any;
+}) => {
   //should be memoized or stable
-  const columns = useMemo<MRT_ColumnDef<Person>[]>(
+  const columns = React.useMemo<MRT_ColumnDef<Book>[]>(
     () => [
       {
         accessorKey: "number", //access nested data with dot notation
@@ -305,6 +311,24 @@ const DynamicTable = ({ data }: { data: Person[] }) => {
     []
   );
 
+  const [columnFilters, setColumnFilters] = React.useState([]);
+  const [data, setData] = React.useState(books);
+
+  console.log("columnFilter", columnFilters);
+
+  React.useEffect(() => {
+    // const fetchData = async () => {
+    //   // send api requests when columnFilters state changes
+    //   // const filteredData = await fetch();
+    // };
+
+    fetchBooks(columnFilters);
+  }, [columnFilters]);
+
+  React.useEffect(() => {
+    setData(books);
+  }, [books]);
+
   const table = useMaterialReactTable({
     columns,
     data, //data must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
@@ -312,6 +336,9 @@ const DynamicTable = ({ data }: { data: Person[] }) => {
     enablePagination: false,
     enableColumnActions: false,
     enableBottomToolbar: false,
+    manualFiltering: true,
+    onColumnFiltersChange: setColumnFilters,
+    state: { columnFilters },
     renderTopToolbarCustomActions: () => (
       <Typography variant="h6" fontWeight={600}>
         List of Owner
