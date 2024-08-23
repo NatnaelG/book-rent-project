@@ -35,8 +35,8 @@ export default  function Layout({ children }: { children: React.ReactNode }) {
     fetchData();
   }, []);
 
-// if (user === null) return <></>
-localStorage.setItem("user", JSON.stringify(user || {}))
+if (user === null) return <></>
+localStorage.setItem("user", JSON.stringify(user))
   return (
     <Box sx={{ display: "flex" }}>
       {/* <>{console.log("hihihihihi", theme)}</> */}
