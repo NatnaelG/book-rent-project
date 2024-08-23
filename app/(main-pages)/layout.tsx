@@ -3,7 +3,7 @@
 import { Box } from "@mui/material";
 import ResponsiveDrawer from "../ui/dashboard/side-drawer";
 import Toolbar from "@mui/material/Toolbar";
-import { updateAbility } from "../lib/updateAbilities";
+// import { updateAbility } from "../lib/updateAbilities";
 import { getUserBySession, User } from "../lib/actions";
 import React from "react";
 

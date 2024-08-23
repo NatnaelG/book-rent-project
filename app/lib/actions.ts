@@ -13,7 +13,7 @@ import prisma from "./db";
 import { deleteSession, getSession } from "./session";
 // import defineAbilityFor from "./ability";
 // import { useAbilityContext } from "./can";
-import { updateAbility } from "./updateAbilities";
+// import { updateAbility } from "./updateAbilities";
 // import { Ability, AbilityBuilder } from "@casl/ability";
 // import { useContext } from "react";
 // import { useAbilityContext } from "./can";
