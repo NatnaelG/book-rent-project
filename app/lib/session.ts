@@ -10,6 +10,8 @@ const encodedKey = new TextEncoder().encode(secretKey);
 export async function encrypt(payload: {
   id: string;
   status: string;
+  role: string;
+  isAdmin: boolean;
   expiresAt: Date;
 }) {
   return new SignJWT(payload)
@@ -27,6 +29,8 @@ export async function decrypt(session: string | undefined = "") {
     return payload as {
       id: string;
       status: string;
+      role: string;
+      isAdmin: boolean;
       expiresAt: Date;
     };
   } catch (error) {
@@ -34,9 +38,9 @@ export async function decrypt(session: string | undefined = "") {
   }
 }
 
-export async function createSession(id: string, status: string) {
+export async function createSession(id: string, status: string, role: string, isAdmin: boolean) {
   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-  const session = await encrypt({ id, status, expiresAt });
+  const session = await encrypt({ id, status, role, isAdmin, expiresAt });
 
   cookies().set("session", session, {
     httpOnly: true,

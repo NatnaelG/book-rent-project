@@ -11,12 +11,13 @@ import { redirect } from "next/navigation";
 // import { AuthError } from "next-auth";
 import prisma from "./db";
 import { deleteSession, getSession } from "./session";
+import defineAbilityFor from "./ability";
 
 // import { decrypt } from "@/app/lib/session";
 // import { cookies } from "next/headers";
 // ...
 
-type User = {
+export type User = {
   id: string;
   name: string;
   email: string;
@@ -24,6 +25,8 @@ type User = {
   location: string;
   phoneNumber: string;
   status: string;
+  role: string;
+  isAdmin: boolean;
 };
 
 async function getUser(email: string): Promise<User | null> {
@@ -145,7 +148,8 @@ export async function authenticate(state: FormState, formData: FormData) {
       message: "Invalid credentials!",
     };
   }
-  await createSession(user.id, user.status);
+  await createSession(user.id, user.status, user.role, user.isAdmin);
+  const ability = defineAbilityFor(user);
   // return user;
   redirect("/dashboard");
 }
