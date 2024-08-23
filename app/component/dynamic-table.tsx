@@ -1,6 +1,7 @@
 import * as React from "react";
 import {
   MRT_ColumnFiltersState,
+  MRT_FilterOption,
   MaterialReactTable,
   useMaterialReactTable,
   type MRT_ColumnDef,
@@ -313,6 +314,7 @@ const DynamicTable = ({
   );
 
   const [columnFilters, setColumnFilters] = React.useState<MRT_ColumnFiltersState>([]);
+  const [globalFilter, setGlobalFilter] = React.useState<MRT_FilterOption>('');
   const [data, setData] = React.useState(books);
 
   console.log("columnFilter", columnFilters);
@@ -323,8 +325,10 @@ const DynamicTable = ({
     //   // const filteredData = await fetch();
     // };
 
-    fetchBooks(columnFilters);
-  }, [columnFilters]);
+    console.log("Book Search", globalFilter)
+
+    fetchBooks(columnFilters, globalFilter);
+  }, [columnFilters, globalFilter]);
 
   React.useEffect(() => {
     setData(books);
@@ -339,6 +343,7 @@ const DynamicTable = ({
     enableBottomToolbar: false,
     manualFiltering: true,
     onColumnFiltersChange: setColumnFilters,
+    onGlobalFilterChange: setGlobalFilter,
     state: { columnFilters },
     renderTopToolbarCustomActions: () => (
       <Typography variant="h6" fontWeight={600}>

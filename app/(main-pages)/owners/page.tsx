@@ -32,8 +32,8 @@ export default function Owners() {
     }[]
   >([]);
 
-  const fetchBooks = (params: { id: string; value: string }[] | null = null) =>
-    getBooks(params).then((res) => setBooks(res));
+  const fetchBooks = (params: { id: string; value: string }[] | null = null, search: string = "") =>
+    getBooks(params, search).then((res) => setBooks(res));
 
   useEffect(() => {
     fetchBooks();

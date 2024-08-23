@@ -42,12 +42,10 @@ export type User = {
 export type UserWithPassword = User & {
   password: string;
 };
-async function getUser(email: string): Promise<UserWithPassword
-  | null
-> {
+async function getUser(email: string): Promise<UserWithPassword | null> {
   return await prisma.user.findFirst({
     omit: {
-      password: false
+      password: false,
     },
     where: {
       email: email,
@@ -226,8 +224,11 @@ export async function uploadBook(values: {
   }
 }
 
-export async function getBooks(params: { id: string; value: string }[] | null) {
-  console.log("Params", params);
+export async function getBooks(
+  params: { id: string; value: string }[] | null,
+  search: string
+) {
+  console.log("Params", params, search);
   // let query = params !== null && params?.length > 0 ? { ["where"]: {} } : {};
   let query = { where: {} };
 
@@ -236,20 +237,52 @@ export async function getBooks(params: { id: string; value: string }[] | null) {
       if (param.id === "name") {
         query.where = {
           ...query.where,
-          owner: { [param.id]: { contains: param.value } },
+          owner: { [param.id]: { contains: param.value, mode: "insensitive" } },
         };
-        // query.where["owner"][param.id] = { contains: param.value };
+        // query.where["owner"][param.id] = { contains: param.value, mode: 'insensitive', };
       } else {
         query.where = {
           ...query.where,
-          [param.id]: { contains: param.value },
+          [param.id]: { contains: param.value, mode: "insensitive" },
         };
-        // query.where[param.id] = { contains: param.value };
+        // query.where[param.id] = { contains: param.value, mode: 'insensitive', };
       }
     }
-    console.log("query0", query);
+    // console.log("query0", query);
     return param;
   });
+
+  if (search.length > 0) {
+    query.where = {
+      ...query.where,
+      OR: [
+        {
+          bookName: {
+            search: search,
+          },
+        },
+        {
+          author: {
+            search: search,
+          },
+        },
+        {
+          category: {
+            search: search,
+          },
+        },
+        {
+          status: {
+            search: search,
+          },
+        },
+      ],
+    };
+    // body: {
+    // search: search,
+    // },
+  }
+  console.log("Params", query);
 
   return await prisma.book.findMany({
     ...query,
