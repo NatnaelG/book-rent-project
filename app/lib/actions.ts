@@ -12,7 +12,7 @@ import { redirect } from "next/navigation";
 import prisma from "./db";
 import { deleteSession, getSession } from "./session";
 // import defineAbilityFor from "./ability";
-import { useAbilityContext } from "./can";
+// import { useAbilityContext } from "./can";
 import { updateAbility } from "./updateAbilities";
 // import { Ability, AbilityBuilder } from "@casl/ability";
 // import { useContext } from "react";
