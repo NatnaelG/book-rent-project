@@ -11,11 +11,21 @@ import { redirect } from "next/navigation";
 // import { AuthError } from "next-auth";
 import prisma from "./db";
 import { deleteSession, getSession } from "./session";
-import defineAbilityFor from "./ability";
+// import defineAbilityFor from "./ability";
+import { useAbilityContext } from "./can";
+import { updateAbility } from "./updateAbilities";
+// import { Ability, AbilityBuilder } from "@casl/ability";
+// import { useContext } from "react";
+// import { useAbilityContext } from "./can";
+// import { updateAbility } from "./updateAbilities";
 
 // import { decrypt } from "@/app/lib/session";
 // import { cookies } from "next/headers";
 // ...
+
+// import { AbilityBuilder, Ability } from '@casl/ability';
+// import React, { useState, useContext } from 'react';
+// import { AbilityContext } from './Can';
 
 export type User = {
   id: string;
@@ -149,9 +159,32 @@ export async function authenticate(state: FormState, formData: FormData) {
     };
   }
   await createSession(user.id, user.status, user.role, user.isAdmin);
-  const ability = defineAbilityFor(user);
+
+
+// console.log("hi there", temp)
+  // const defineAbilityFor = useAbilityContext;
+
+  // defineAbilityFor()(user);
+
+  // const ability = defineAbilityFor(user);
+  // console.log("ability", ability)
+  // updateAbility(ability, user)
+  // const ability = defineAbilityFor(user);
   // return user;
   redirect("/dashboard");
+}
+
+export async function getUserBySession() {
+  const session = await getSession();
+
+  if (session === null || session === undefined) return null;
+  const user = await prisma.user.findFirst({
+    where: {
+      id: session.id
+    }
+  })
+
+  return user || null;
 }
 
 export async function uploadBook(values: {

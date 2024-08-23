@@ -15,6 +15,8 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 // export const inter = Inter({ subsets: ['latin'] });
 // export const lusitana = Lusitana({ subsets: ['latin'], weight: ['400', '700'] });
 
+import { AbilityWrapper } from "./lib/can";
+
 export const metadata: Metadata = {
   title: "Book Rent",
   description: "Book Rental system",
@@ -31,9 +33,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         {/* <ReactQueryProvider> */}
+        <AbilityWrapper>
           {children}
           <SpeedInsights />
           <Analytics />
+        </AbilityWrapper>
         {/* </ReactQueryProvider> */}
       </body>
     </html>

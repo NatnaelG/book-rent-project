@@ -10,11 +10,28 @@ import { usePathname, useRouter } from "next/navigation";
 // import DynammicTableProvider from "../component/dynamic-table";
 
 import Item from "../../ui/styled-paper";
+import { Can } from "@/app/lib/can";
+
+import { cookies } from 'next/headers'
+import { getUserBySession, User } from "@/app/lib/actions";
+import defineAbilityFor from "@/app/lib/ability";
 
 export default function Dashboard() {
   const pathname = usePathname();
   const { replace } = useRouter();
 
+  // const cookieStore = cookies()
+  // const theme = cookieStore.get('session')
+
+  const user: User = JSON.parse(localStorage.getItem("user") || "{}");
+  if (user !== null) {
+  }
+  
+  
+      const ability = defineAbilityFor(user)
+      console.log("CASL CHECK", ability.can("upload", "Book"), user, ability)
+
+// console.log("hihihihihihihi", document.cookie)
   useEffect(() => {
     if (pathname === "/register") {
       replace(`/dashboard`);
@@ -22,6 +39,8 @@ export default function Dashboard() {
   }, [pathname]);
 
   return (
+    // <Can I="create" a="Owner">
+      
     <Grid container spacing={2}>
       <Grid xs={12} md={8} lg={3}>
         <Item sx={{ height: { lg: `calc(100vh - 100px)`, xs: "fit-content" } }}>
@@ -43,5 +62,6 @@ export default function Dashboard() {
         </Grid>
       </Grid>
     </Grid>
+    // {/* </Can> */}
   );
 }
