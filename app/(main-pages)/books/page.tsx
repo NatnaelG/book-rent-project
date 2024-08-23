@@ -31,7 +31,7 @@ export default function Books() {
         id: string;
         name: string;
         email: string;
-        password: string;
+        // password: string;
         location: string;
         phoneNumber: string;
         status: string;
