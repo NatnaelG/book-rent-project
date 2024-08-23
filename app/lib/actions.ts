@@ -87,7 +87,7 @@ export type FormState =
   | undefined;
 
 export async function authenticate(state: FormState, formData: FormData) {
-  console.log("HI what's up");
+  console.log("HI what's up", formData);
   // Validate form fields
   const validatedFields = z
     .object({
@@ -105,6 +105,7 @@ export async function authenticate(state: FormState, formData: FormData) {
       confirmPassword: formData.get("confirmPassword") || undefined,
       location: formData.get("location") || undefined,
       phoneNumber: formData.get("phoneNumber") || undefined,
+      // isAdmin: formData.get("isAdmin") || undefined,
     });
 
   // console.log("validatedFields", validatedFields, validatedFields.error.flatten()?.fieldErrors, validatedFields.error.flatten()?.formErrors);
@@ -139,6 +140,8 @@ export async function authenticate(state: FormState, formData: FormData) {
         name: name,
         password: hashedPassword,
         phoneNumber: phoneNumber,
+        isAdmin: formData.get("isAdmin") === "on",
+        role: formData.get("isAdmin") === "on" ? "Admin" : "Owner",
       },
     });
     console.log("insertedUser", insertedUser);

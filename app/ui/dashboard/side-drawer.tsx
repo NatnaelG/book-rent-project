@@ -14,13 +14,18 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import ListItems from "./list-items";
 
-import { signout } from "@/app/lib/actions";
+import { signout, User } from "@/app/lib/actions";
 
 interface Props {
   drawerWidth: number;
 }
 
 export default function ResponsiveDrawer(props: Props) {
+
+  const user: User = JSON.parse(localStorage.getItem("user") || "{}");
+  if (user !== null) {
+  }
+
   const { drawerWidth } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
@@ -139,7 +144,7 @@ export default function ResponsiveDrawer(props: Props) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Owner/Dashboard
+            {user.role}/Dashboard
           </Typography>
         </Toolbar>
       </AppBar>

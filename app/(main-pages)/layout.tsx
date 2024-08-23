@@ -19,13 +19,14 @@ export default  function Layout({ children }: { children: React.ReactNode }) {
   // if (user === null) return;
   //   updateAbility(user)
 
+  const [user, setUser] = React.useState<User | null>(null);
 
   React.useEffect(() => {
     async function fetchData() {
       try {
         const fetchedData = await getUserBySession();
         console.log("Fetched data SERVER ACTION INGRESOS:", typeof fetchedData, JSON.stringify(fetchedData));
-        // setData(fetchedData);
+        setUser(fetchedData);
         fetchedData !== null && localStorage.setItem("user", JSON.stringify(fetchedData))
       } catch (error) {
         console.error("Error fetching data SERVER ACTION INGRESOS:", error);
@@ -34,7 +35,8 @@ export default  function Layout({ children }: { children: React.ReactNode }) {
     fetchData();
   }, []);
 
-
+if (user === null) return <></>
+localStorage.setItem("user", JSON.stringify(user))
   return (
     <Box sx={{ display: "flex" }}>
       {/* <>{console.log("hihihihihi", theme)}</> */}

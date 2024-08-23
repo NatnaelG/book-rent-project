@@ -5,12 +5,15 @@ export default function defineAbilityFor(user: User) {
   const { can, cannot, build } = new AbilityBuilder(createMongoAbility);
 
   if (user.isAdmin) {
+    can('read', 'all');
+    cannot('read', "/book-upload");
     can("manage", "Owner");
     can("read", "Book");
     can("update", "Book", { status: true });
   } else {
     can('read', 'all');
-    cannot('read', "/book-upload");
+    cannot('read', "/owners");
+    cannot('read', "/books");
     can("read", "Book", { owner: user.id});
     can("update", "Book", { owner: user.id});
     can("upload", "Book")

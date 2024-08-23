@@ -112,6 +112,10 @@ export default function AuthForm(prop: { type: "Login" | "Sign Up" }) {
             />
           </>
         )}
+    
+        {prop.type !== "Login" && <FormGroup>
+          <FormControlLabel control={<Checkbox name="isAdmin" id="isAdmin" />} label={"Admin"} />
+        </FormGroup>}
 
         <FormGroup>
           <FormControlLabel
@@ -123,6 +127,7 @@ export default function AuthForm(prop: { type: "Login" | "Sign Up" }) {
             }
           />
         </FormGroup>
+
 
         <Button variant="contained" disabled={isPending} type="submit">
           {isPending ? "Submitting..." : prop.type}
