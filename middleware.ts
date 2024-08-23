@@ -43,6 +43,17 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/dashboard", req.nextUrl));
   }
 
+  if (
+    session?.id &&
+    !req.nextUrl.pathname.startsWith("/dashboard")
+  ) {
+    if (
+      session?.role === "Owner" && ["/books", "/owners"].includes(path) ||
+      session?.role === "Admin" && ["/book-upload"].includes(path)
+    )
+    return NextResponse.redirect(new URL("/dashboard", req.nextUrl));
+  }
+
   return NextResponse.next();
 }
 
