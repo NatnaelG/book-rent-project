@@ -31,7 +31,7 @@ export type User = {
   id: string;
   name: string;
   email: string;
-  password: string;
+  // password: string;
   location: string;
   phoneNumber: string;
   status: string;
@@ -39,8 +39,16 @@ export type User = {
   isAdmin: boolean;
 };
 
-async function getUser(email: string): Promise<User | null> {
+export type UserWithPassword = User & {
+  password: string;
+};
+async function getUser(email: string): Promise<UserWithPassword
+  | null
+> {
   return await prisma.user.findFirst({
+    omit: {
+      password: false
+    },
     where: {
       email: email,
     },
@@ -163,8 +171,7 @@ export async function authenticate(state: FormState, formData: FormData) {
   }
   await createSession(user.id, user.status, user.role, user.isAdmin);
 
-
-// console.log("hi there", temp)
+  // console.log("hi there", temp)
   // const defineAbilityFor = useAbilityContext;
 
   // defineAbilityFor()(user);
@@ -183,9 +190,9 @@ export async function getUserBySession() {
   if (session === null || session === undefined) return null;
   const user = await prisma.user.findFirst({
     where: {
-      id: session.id
-    }
-  })
+      id: session.id,
+    },
+  });
 
   return user || null;
 }
