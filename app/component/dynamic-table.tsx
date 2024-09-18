@@ -344,12 +344,22 @@ const DynamicTable = ({
     manualFiltering: true,
     onColumnFiltersChange: setColumnFilters,
     onGlobalFilterChange: setGlobalFilter,
-    state: { columnFilters },
+    state: { columnFilters, isLoading: data.length === 0 },
     renderTopToolbarCustomActions: () => (
       <Typography variant="h6" fontWeight={600}>
         List of Owner
       </Typography>
     ),
+    // state: { isLoading: true },
+    muiCircularProgressProps: {
+      color: 'secondary',
+      thickness: 5,
+      size: 55,
+    },
+    muiSkeletonProps: {
+      animation: 'pulse',
+      height: 15,
+    },
   });
 
   return <MaterialReactTable table={table} />;
