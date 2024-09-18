@@ -21,6 +21,7 @@ import DefaultAvatar from "../../public/default-avatar.jpeg";
 
 //example data type
 type Book = {
+  id: string;
   number: number;
   author: string;
   name: string;
@@ -140,9 +141,11 @@ type Book = {
 const DynamicTable = ({
   books,
   fetchBooks,
+  updateBookRequest,
 }: {
   books: Book[];
   fetchBooks: any;
+  updateBookRequest: any;
 }) => {
   //should be memoized or stable
   const columns = React.useMemo<MRT_ColumnDef<Book>[]>(
@@ -275,6 +278,17 @@ const DynamicTable = ({
                     },
                   },
                 }}
+                onClick={() => {
+                  console.log("clicked", row.original.id, renderedCellValue);
+                  const {author, category, bookName, id} = row.original
+                  updateBookRequest(id, {
+                    bookName,
+                    author,
+                    category,
+                    status:
+                      renderedCellValue === "ACTIVE" ? "INACTIVE" : "ACTIVE",
+                  });
+                }}
               />
             }
             label={
@@ -313,8 +327,9 @@ const DynamicTable = ({
     []
   );
 
-  const [columnFilters, setColumnFilters] = React.useState<MRT_ColumnFiltersState>([]);
-  const [globalFilter, setGlobalFilter] = React.useState<MRT_FilterOption>('');
+  const [columnFilters, setColumnFilters] =
+    React.useState<MRT_ColumnFiltersState>([]);
+  const [globalFilter, setGlobalFilter] = React.useState<MRT_FilterOption>("");
   const [data, setData] = React.useState(books);
 
   console.log("columnFilter", columnFilters);
@@ -325,7 +340,7 @@ const DynamicTable = ({
     //   // const filteredData = await fetch();
     // };
 
-    console.log("Book Search", globalFilter)
+    console.log("Book Search", globalFilter);
 
     fetchBooks(columnFilters, globalFilter);
   }, [columnFilters, globalFilter]);
@@ -352,12 +367,12 @@ const DynamicTable = ({
     ),
     // state: { isLoading: true },
     muiCircularProgressProps: {
-      color: 'secondary',
+      color: "secondary",
       thickness: 5,
       size: 55,
     },
     muiSkeletonProps: {
-      animation: 'pulse',
+      animation: "pulse",
       height: 15,
     },
   });

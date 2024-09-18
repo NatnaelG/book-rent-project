@@ -286,8 +286,44 @@ export async function getBooks(
 
   return await prisma.book.findMany({
     ...query,
+    orderBy: [
+      {
+        createdAt: 'desc',
+      },
+    ],
     include: {
       owner: true,
     },
   });
+}
+
+export async function updateBook(
+  id: string,
+  values: {
+    book_name: string;
+    author_name: string;
+    category: string;
+    status: string;
+  }
+) {
+  console.log("valuesOfBook", values);
+  try {
+    const updatedBook = await prisma.book
+      .update({
+        where: {
+          id: id,
+        },
+        data: {
+          ...values,
+        },
+      })
+      .then((res) => res)
+      .catch((err) => err);
+    console.log("updatedBook", updateBook);
+
+    // return updatedBook;
+  } catch (error) {
+    console.log("insertedBookError", error);
+    return "Something went wrong.";
+  }
 }

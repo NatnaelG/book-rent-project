@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import DynamicTable from "@/app/component/dynamic-table";
 import Item from "../../ui/styled-paper";
 
-import { getBooks } from "@/app/lib/actions";
+import { getBooks, updateBook } from "@/app/lib/actions";
 // import { Prisma } from "@prisma/client";
 
 // type Person = {
@@ -41,14 +41,26 @@ export default function Books() {
     }[]
   >([]);
 
-  const fetchBooks = (params: { id: string; value: string }[] | null = null, search: string = "") =>
-    getBooks(params, search).then((res) => setBooks(res));
+  const fetchBooks = (
+    params: { id: string; value: string }[] | null = null,
+    search: string = ""
+  ) => getBooks(params, search).then((res) => setBooks(res));
 
   useEffect(() => {
     fetchBooks();
   }, []);
 
   console.log("Books", books);
+
+  const updateBookRequest = (
+    id: string,
+    values: {
+      book_name: string;
+      author_name: string;
+      category: string;
+      status: string;
+    }
+  ) => updateBook(id, values).then((res) => fetchBooks());
 
   return (
     <Item
@@ -65,6 +77,7 @@ export default function Books() {
         books={books.map((book, index) => ({
           //   ...book,
           //   number: number,
+          id: book.id,
           author: book.author,
           //   name: string,
           category: book.category,
@@ -74,6 +87,7 @@ export default function Books() {
           number: ++index,
         }))}
         fetchBooks={fetchBooks}
+        updateBookRequest={updateBookRequest}
       />
     </Item>
   );
