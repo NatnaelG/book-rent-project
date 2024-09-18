@@ -142,10 +142,16 @@ const DynamicTable = ({
   books,
   fetchBooks,
   updateBookRequest,
+  setIsLoading,
+  isLoading,
+  isError,
 }: {
   books: Book[];
   fetchBooks: any;
   updateBookRequest: any;
+  setIsLoading: any;
+  isLoading: boolean;
+  isError: boolean;
 }) => {
   //should be memoized or stable
   const columns = React.useMemo<MRT_ColumnDef<Book>[]>(
@@ -280,7 +286,8 @@ const DynamicTable = ({
                 }}
                 onClick={() => {
                   console.log("clicked", row.original.id, renderedCellValue);
-                  const {author, category, bookName, id} = row.original
+                  const { author, category, bookName, id } = row.original;
+                  setIsLoading(true);
                   updateBookRequest(id, {
                     bookName,
                     author,
@@ -341,7 +348,7 @@ const DynamicTable = ({
     // };
 
     console.log("Book Search", globalFilter);
-
+    setIsLoading(true);
     fetchBooks(columnFilters, globalFilter);
   }, [columnFilters, globalFilter]);
 
@@ -359,13 +366,24 @@ const DynamicTable = ({
     manualFiltering: true,
     onColumnFiltersChange: setColumnFilters,
     onGlobalFilterChange: setGlobalFilter,
-    state: { columnFilters, isLoading: data.length === 0 },
+    state: {
+      columnFilters,
+      isLoading: data.length === 0 || isLoading,
+      showAlertBanner: isError,
+      // showProgressBars: isLoading,
+      showSkeletons: data.length === 0 && isLoading,
+    },
     renderTopToolbarCustomActions: () => (
       <Typography variant="h6" fontWeight={600}>
         List of Owner
       </Typography>
     ),
-    // state: { isLoading: true },
+    muiToolbarAlertBannerProps: isError
+      ? {
+          color: "error",
+          children: "Error loading data",
+        }
+      : undefined,
     muiCircularProgressProps: {
       color: "secondary",
       thickness: 5,
@@ -373,7 +391,7 @@ const DynamicTable = ({
     },
     muiSkeletonProps: {
       animation: "pulse",
-      height: 15,
+      height: 28,
     },
   });
 

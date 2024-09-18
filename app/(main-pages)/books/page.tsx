@@ -41,10 +41,17 @@ export default function Books() {
     }[]
   >([]);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const fetchBooks = (
     params: { id: string; value: string }[] | null = null,
     search: string = ""
-  ) => getBooks(params, search).then((res) => setBooks(res));
+  ) =>
+    getBooks(params, search).then((res) => {
+      setBooks(res);
+      setIsLoading(false);
+      return res;
+    });
 
   useEffect(() => {
     fetchBooks();
@@ -60,7 +67,12 @@ export default function Books() {
       category: string;
       status: string;
     }
-  ) => updateBook(id, values).then((res) => fetchBooks());
+  ) =>
+    updateBook(id, values).then((res) => {
+      console.log("update says", res);
+      fetchBooks();
+      return res;
+    });
 
   return (
     <Item
@@ -88,6 +100,9 @@ export default function Books() {
         }))}
         fetchBooks={fetchBooks}
         updateBookRequest={updateBookRequest}
+        setIsLoading={setIsLoading}
+        isLoading={isLoading}
+        isError={true}
       />
     </Item>
   );

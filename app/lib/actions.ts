@@ -316,12 +316,12 @@ export async function updateBook(
         data: {
           ...values,
         },
-      })
-      .then((res) => res)
-      .catch((err) => err);
-    console.log("updatedBook", updateBook);
+      });
+      // .then((res) => res)
+      // .catch((err) => err);
+    console.log("updatedBook", updatedBook);
 
-    // return updatedBook;
+    return updatedBook;
   } catch (error) {
     console.log("insertedBookError", error);
     return "Something went wrong.";
