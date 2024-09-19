@@ -5,11 +5,10 @@ import { useEffect, useState } from "react";
 import DynamicTable from "@/app/component/dynamic-table";
 import Item from "../../ui/styled-paper";
 
-import { getBooks } from "@/app/lib/actions";
+import { getBooks, updateBook } from "@/app/lib/actions";
 
 export default function Owners() {
-
-    const [books, setBooks] = useState<
+  const [books, setBooks] = useState<
     {
       id: string;
       bookName: string;
@@ -32,12 +31,36 @@ export default function Owners() {
     }[]
   >([]);
 
-  const fetchBooks = (params: { id: string; value: string }[] | null = null, search: string = "") =>
-    getBooks(params, search).then((res) => setBooks(res));
+  const [isLoading, setIsLoading] = useState(false);
+
+  const fetchBooks = (
+    params: { id: string; value: string }[] | null = null,
+    search: string = ""
+  ) =>
+    getBooks(params, search).then((res) => {
+      setBooks(res);
+      setIsLoading(false);
+      return res;
+    });
 
   useEffect(() => {
     fetchBooks();
   }, []);
+
+  const updateBookRequest = (
+    id: string,
+    values: {
+      book_name: string;
+      author_name: string;
+      category: string;
+      status: string;
+    }
+  ) =>
+    updateBook(id, values).then((res) => {
+      console.log("update says", res);
+      fetchBooks();
+      return res;
+    });
 
   return (
     <Item
@@ -54,6 +77,7 @@ export default function Owners() {
         books={books.map((book, index) => ({
           //   ...book,
           //   number: number,
+          id: book.id,
           author: book.author,
           //   name: string,
           category: book.category,
@@ -63,6 +87,10 @@ export default function Owners() {
           number: ++index,
         }))}
         fetchBooks={fetchBooks}
+        updateBookRequest={updateBookRequest}
+        setIsLoading={setIsLoading}
+        isLoading={isLoading}
+        isError={true}
       />
     </Item>
   );
