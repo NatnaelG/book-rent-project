@@ -69,7 +69,7 @@ export default function Books() {
     }
   ) =>
     updateBook(id, values).then((res) => {
-      console.log("update says", res);
+      // console.log("update says", res);
       fetchBooks();
       return res;
     });
